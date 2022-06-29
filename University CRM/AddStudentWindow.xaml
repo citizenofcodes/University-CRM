@@ -1,0 +1,24 @@
+﻿<Window x:Class="University_CRM.AddStudentWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:University_CRM"
+        mc:Ignorable="d"
+        Title="Add new student" Height="212" Width="230" WindowStartupLocation="CenterScreen" ResizeMode="NoResize">
+    <Window.Resources>
+        <Style TargetType="TextBox">
+            <Setter Property="FontSize" Value="16" />
+            <Setter Property="Margin" Value="10"/>
+        </Style>
+    </Window.Resources>
+    <Grid>
+        <StackPanel Margin="10">
+            <TextBox x:Name="FirstName" ToolTip="First Name">First Name</TextBox>
+            <TextBox x:Name="LastName" ToolTip="Last Name">Last Name</TextBox>
+            <TextBox x:Name="Course" ToolTip="Course" >Course</TextBox>
+            <Button x:Name="AddButton" MaxWidth="150" Click="AddButton_Click" Cursor="Hand">Add</Button>
+        </StackPanel>
+
+    </Grid>
+</Window>
