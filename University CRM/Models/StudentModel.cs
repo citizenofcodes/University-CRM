@@ -10,14 +10,8 @@ namespace University_CRM.Models
     internal class StudentModel : INotifyPropertyChanged
 
     {
-        
         public int Id { get; set; }
-        private string _firstName;
-
-
-
-
-
+        private string _firstName; 
         public string FirstName
         {
             get { return _firstName; }
