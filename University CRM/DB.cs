@@ -8,7 +8,11 @@ namespace University_CRM
        
         public static MySqlConnection GetConnection()
         {
-            MySqlConnection conn = new MySqlConnection("server=localhost;uid=root;pwd=root;database=university");
+            MySqlConnection conn = new MySqlConnection("server=db-mysql-fra1-23926-do-user-11906132-0.b.db.ondigitalocean.com;" +
+                                                       "port=25060;" +
+                                                       "uid=doadmin;" +
+                                                       "pwd=AVNS_81E2oOjULm7AddEr_8Q;" +
+                                                       "database=university;");
             conn.Open();
             return conn;
         }

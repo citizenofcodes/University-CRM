@@ -13,10 +13,12 @@ namespace University_CRM
     /// </summary>
     public partial class DataBaseViewer : Window
     {
+
         private BindingList<StudentModel> _studentsList = new BindingList<StudentModel>();
 
         public DataBaseViewer()
         {
+            //DataBaseFiller.FillDb();
             InitializeComponent();
             RefreshGrid();
             _studentsList.ListChanged += StudentsListListChanged;
