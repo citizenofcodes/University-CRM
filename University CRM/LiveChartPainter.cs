@@ -24,11 +24,9 @@ namespace University_CRM
 
         public static void AddNewPieSeries(SeriesCollection series)
         {
-            List<string> courList = new List<string>();
             MySqlCommand cmd = new MySqlCommand("", DB.GetConnection());
             cmd.CommandText = @"SELECT Course, COUNT(*) FROM students GROUP BY Course";
             var reader = cmd.ExecuteReader();
-            int i = 0;
             while (reader.Read())
             {
                 series.Add(new PieSeries
