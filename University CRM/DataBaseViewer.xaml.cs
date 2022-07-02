@@ -17,7 +17,7 @@ namespace University_CRM
         {
 
 
-            DataBaseFiller.FillDb();
+            
             InitializeComponent();
 
             RefreshGrid();
