@@ -1,12 +1,6 @@
-﻿using LiveCharts;
-using LiveCharts.Wpf;
-using MySql.Data.MySqlClient;
-using System;
+﻿using MySql.Data.MySqlClient;
 using System.ComponentModel;
-using System.Security.Cryptography.X509Certificates;
-using System.Threading.Tasks;
 using System.Windows;
-using DigitalOcean.API;
 using University_CRM.Models;
 
 namespace University_CRM
@@ -21,14 +15,15 @@ namespace University_CRM
 
         public DataBaseViewer()
         {
-           
-            //DataBaseFiller.FillDb();
+
+
+            DataBaseFiller.FillDb();
             InitializeComponent();
 
             RefreshGrid();
             _studentsList.ListChanged += StudentsListListChanged;
             Pie.DataContext = LiveChartPainter.DrawDonut();
-            
+
         }
 
 
@@ -58,9 +53,9 @@ namespace University_CRM
 
                 GridViews.ItemsSource = _studentsList;
             }
-            
+
             reader.Close();
-           
+
         }
 
 
@@ -118,5 +113,5 @@ namespace University_CRM
         }
     }
 
-    
+
 }

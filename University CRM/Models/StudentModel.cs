@@ -11,7 +11,7 @@ namespace University_CRM.Models
 
     {
         public int Id { get; set; }
-        private string _firstName; 
+        private string _firstName;
         public string FirstName
         {
             get { return _firstName; }
@@ -110,12 +110,12 @@ namespace University_CRM.Models
 
             }
 
-             filteredList = new BindingList<StudentModel>(filteredList.ToList());
+            filteredList = new BindingList<StudentModel>(filteredList.ToList());
             gridViews.ItemsSource = filteredList;
 
         }
 
-        public static void UpdateStudent(ListChangedEventArgs e , BindingList<StudentModel> studentsList)
+        public static void UpdateStudent(ListChangedEventArgs e, BindingList<StudentModel> studentsList)
         {
             MySqlCommand cmd = new MySqlCommand("", DB.GetConnection());
             cmd.CommandText = $"UPDATE `students` SET `FirstName`=@FirstName,`LastName`=@LastName,`Course`=@Course WHERE id = @id";
