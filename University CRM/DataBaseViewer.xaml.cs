@@ -1,6 +1,13 @@
 ﻿using MySql.Data.MySqlClient;
 using System.ComponentModel;
+using System.IO;
+using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Automation.Peers;
+using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
+using System.Windows.Input;
+using System.Windows.Media.Imaging;
 using University_CRM.Models;
 
 namespace University_CRM
@@ -16,8 +23,8 @@ namespace University_CRM
         public DataBaseViewer()
         {
 
-
-            
+            //DataBaseFiller.FillDb();
+          
             InitializeComponent();
 
             RefreshGrid();
@@ -56,6 +63,7 @@ namespace University_CRM
 
             reader.Close();
 
+            
         }
 
 
@@ -110,6 +118,46 @@ namespace University_CRM
         private void DeleteButton_Click(object sender, RoutedEventArgs e)
         {
             StudentModel.DeleteStudentFromDb(sender, GridViews);
+        }
+
+        private async void Row_Selected(object sender, RoutedEventArgs e)
+        {
+            PopupImage.Source = null;
+            DigitalOceanSpacesController doController = new DigitalOceanSpacesController();
+
+            var rowindex = (e.Source as DataGridRow).GetIndex();
+            var FirstName = _studentsList[rowindex].FirstName;
+            var LastName = _studentsList[rowindex].LastName;
+            var Course = _studentsList[rowindex].Course;
+
+
+            Popup.IsOpen = true;
+            PopupFullName.Text = $"{FirstName} {LastName}";
+            PopupCourse.Text = $"{Course}";
+
+
+
+
+            var file = await doController.GetFileInBytes($"{FirstName} {LastName}");
+            BitmapImage image = new BitmapImage();
+            using (MemoryStream imagestream = new MemoryStream(file))
+            {
+                image.BeginInit();
+                image.StreamSource = imagestream;
+                image.CacheOption = BitmapCacheOption.OnLoad;
+                image.EndInit();
+               
+
+                PopupImage.Source = image;
+            }
+
+        }
+
+
+        private void Row_MouseLeave(object sender, MouseEventArgs e)
+        {
+           Popup.IsOpen = false;
+           
         }
     }
 

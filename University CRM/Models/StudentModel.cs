@@ -81,6 +81,7 @@ namespace University_CRM.Models
 
         public static void DeleteStudentFromDb(object sender, DataGrid gridViews)
         {
+            DigitalOceanSpacesController doController = new DigitalOceanSpacesController();
             MySqlCommand cmd = new MySqlCommand("", DB.GetConnection());
             var element = sender as FrameworkElement;
             var studentrow = element.DataContext as StudentModel;
@@ -90,6 +91,7 @@ namespace University_CRM.Models
             var source = gridViews.GetValue(ItemsControl.ItemsSourceProperty) as BindingList<StudentModel>;
             source.Remove(studentrow);
 
+            doController.DeleteFileFromBucket($"{studentrow.FirstName} {studentrow.LastName}");
 
 
 
@@ -117,6 +119,7 @@ namespace University_CRM.Models
 
         public static void UpdateStudent(ListChangedEventArgs e, BindingList<StudentModel> studentsList)
         {
+            
             MySqlCommand cmd = new MySqlCommand("", DB.GetConnection());
             cmd.CommandText = $"UPDATE `students` SET `FirstName`=@FirstName,`LastName`=@LastName,`Course`=@Course WHERE id = @id";
             cmd.Parameters.AddWithValue("@id", studentsList[e.NewIndex].Id);
@@ -124,6 +127,8 @@ namespace University_CRM.Models
             cmd.Parameters.AddWithValue("@LastName", studentsList[e.NewIndex].LastName);
             cmd.Parameters.AddWithValue("@Course", studentsList[e.NewIndex].Course);
             cmd.ExecuteNonQuery();
+
+           
         }
     }
 }

@@ -28,6 +28,7 @@ namespace University_CRM
             
             using HttpClient client = new HttpClient();
 
+            //var imagebytes = doController.GetFileInBytes("LillianDrake");
 
             int counter = 1;
 
@@ -104,13 +105,13 @@ namespace University_CRM
 
 
 
-        public async Task<byte[]> GetFileInBytes(string objectName)
+        public async Task<byte[]> GetFileInBytes(string fileName)
         {
             MemoryStream ms = new MemoryStream();
 
             try
             {
-                var response = await awsClient.GetObjectAsync(BucketName, objectName);
+                var response = await awsClient.GetObjectAsync(BucketName, $"avatars/{fileName}.jpg");
                 await response.ResponseStream.CopyToAsync(ms);
             }
 
@@ -144,6 +145,21 @@ namespace University_CRM
             }
 
         }
+
+
+        public async Task DeleteFileFromBucket(string fileName)
+        {
+            try
+            {
+                var response = await awsClient.DeleteObjectAsync(BucketName, @$"avatars/{fileName}.jpg");
+            }
+
+            catch (Exception e)
+            {
+                MessageBox.Show(e.Message);
+            }
+        }
+
 
 
     }

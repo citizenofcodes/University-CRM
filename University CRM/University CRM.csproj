@@ -222,5 +222,8 @@
   <ItemGroup>
     <Analyzer Include="..\packages\AWSSDK.S3.3.7.9.20\analyzers\dotnet\cs\AWSSDK.S3.CodeAnalysis.dll" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="avatar0.jpg" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
