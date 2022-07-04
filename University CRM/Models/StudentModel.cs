@@ -111,9 +111,10 @@ namespace University_CRM.Models
                 filteredList = filteredList.Where(x => x.Course.Contains(coursesBox.Text));
 
             }
-
-            filteredList = new BindingList<StudentModel>(filteredList.ToList());
-            gridViews.ItemsSource = filteredList;
+            
+           var bindingfilterlist = new BindingList<StudentModel>(filteredList.ToList());
+           studentsList = bindingfilterlist;
+            gridViews.ItemsSource = studentsList;
 
         }
 

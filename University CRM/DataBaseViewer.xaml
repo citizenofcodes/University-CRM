@@ -36,7 +36,7 @@
             </StackPanel>
             <Popup Name="Popup" Placement="Mouse" AllowsTransparency="True" Width="200" Height="300" >
                 <StackPanel Background="White">
-                    <Image Name="PopupImage" Source="avatar0.jpg"></Image>
+                    <Image Name="PopupImage" Source="avatar0.jpg" MinHeight="100" MinWidth="100"></Image>
                     <TextBlock Name="PopupFullName" Text="Stanislav Grabkov" HorizontalAlignment="Center" FontSize="15" Margin="0,10,0,0"></TextBlock>
                     <TextBlock Name="PopupCourse" Text="Math" HorizontalAlignment="Center" FontSize="15" Margin="0,10,0,0"></TextBlock>
 

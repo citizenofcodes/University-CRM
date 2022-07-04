@@ -1,6 +1,7 @@
 ﻿using MySql.Data.MySqlClient;
 using System.ComponentModel;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Automation.Peers;
@@ -17,18 +18,17 @@ namespace University_CRM
     /// </summary>
     public partial class DataBaseViewer : Window
     {
-
-        private BindingList<StudentModel> _studentsList = new BindingList<StudentModel>();
+        private BindingList<StudentModel> StudentsList = new BindingList<StudentModel>();
 
         public DataBaseViewer()
         {
-
+            
             //DataBaseFiller.FillDb();
-          
+
             InitializeComponent();
 
             RefreshGrid();
-            _studentsList.ListChanged += StudentsListListChanged;
+            StudentsList.ListChanged += StudentsListListChanged;
             Pie.DataContext = LiveChartPainter.DrawDonut();
 
         }
@@ -36,14 +36,14 @@ namespace University_CRM
 
         private void RefreshGrid()
         {
-
+            
             MySqlCommand cmd = new MySqlCommand("", DB.GetConnection());
             cmd.CommandText = "SELECT  id,FirstName,LastName,Course FROM students";
             var reader = cmd.ExecuteReader();
             while (reader.Read())
             {
 
-                _studentsList.Add(new StudentModel()
+                StudentsList.Add(new StudentModel()
                 {
                     Id = reader.GetInt32(0),
                     FirstName = reader.GetString("FirstName"),
@@ -58,7 +58,7 @@ namespace University_CRM
 
 
 
-                GridViews.ItemsSource = _studentsList;
+                GridViews.ItemsSource = StudentsList;
             }
 
             reader.Close();
@@ -86,7 +86,7 @@ namespace University_CRM
                 case ListChangedType.ItemMoved:
                     break;
                 case ListChangedType.ItemChanged:
-                    StudentModel.UpdateStudent(e, _studentsList);
+                    StudentModel.UpdateStudent(e, StudentsList);
 
                     break;
                 case ListChangedType.PropertyDescriptorAdded:
@@ -102,7 +102,7 @@ namespace University_CRM
 
         private void FilterButton_Click(object sender, RoutedEventArgs e)
         {
-            StudentModel.StudentsFilter(NameFilter.Text, _studentsList, CoursesBox, GridViews);
+            StudentModel.StudentsFilter(NameFilter.Text, StudentsList, CoursesBox, GridViews);
         }
 
         private void MenuItem_Add(object sender, RoutedEventArgs e)
@@ -118,6 +118,7 @@ namespace University_CRM
         private void DeleteButton_Click(object sender, RoutedEventArgs e)
         {
             StudentModel.DeleteStudentFromDb(sender, GridViews);
+            
         }
 
         private async void Row_Selected(object sender, RoutedEventArgs e)
@@ -125,32 +126,32 @@ namespace University_CRM
             PopupImage.Source = null;
             DigitalOceanSpacesController doController = new DigitalOceanSpacesController();
 
-            var rowindex = (e.Source as DataGridRow).GetIndex();
-            var FirstName = _studentsList[rowindex].FirstName;
-            var LastName = _studentsList[rowindex].LastName;
-            var Course = _studentsList[rowindex].Course;
+            var selectedRow = (FrameworkElement)e.Source;
+            var rowDataContext = (StudentModel)selectedRow.DataContext;
 
+            var firstName = rowDataContext.FirstName;
+            var lastName = rowDataContext.LastName;
+            var course = rowDataContext.Course;
+
+
+            
+            PopupFullName.Text = $"{firstName} {lastName}";
+            PopupCourse.Text = $"{course}";
 
             Popup.IsOpen = true;
-            PopupFullName.Text = $"{FirstName} {LastName}";
-            PopupCourse.Text = $"{Course}";
 
-
-
-
-            var file = await doController.GetFileInBytes($"{FirstName} {LastName}");
+            var file = await doController.GetFileInBytes($"{firstName} {lastName}");
             BitmapImage image = new BitmapImage();
-            using (MemoryStream imagestream = new MemoryStream(file))
-            {
-                image.BeginInit();
-                image.StreamSource = imagestream;
-                image.CacheOption = BitmapCacheOption.OnLoad;
-                image.EndInit();
+            using MemoryStream imagestream = new MemoryStream(file);
+            image.BeginInit();
+            image.StreamSource = imagestream;
+            image.CacheOption = BitmapCacheOption.OnLoad;
+            image.EndInit();
                
 
-                PopupImage.Source = image;
-            }
+            PopupImage.Source = image;
 
+            
         }
 
 
