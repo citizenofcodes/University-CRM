@@ -1,4 +1,5 @@
-﻿using MySql.Data.MySqlClient;
+﻿using System;
+using MySql.Data.MySqlClient;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -7,7 +8,7 @@ using System.Windows.Controls;
 
 namespace University_CRM.Models
 {
-    internal class StudentModel : INotifyPropertyChanged
+    public class StudentModel : INotifyPropertyChanged
 
     {
         public int Id { get; set; }
@@ -52,8 +53,6 @@ namespace University_CRM.Models
             }
         }
 
-
-
         public event PropertyChangedEventHandler PropertyChanged;
 
         protected virtual void OnPropertyChanged(string propertyname = "")
@@ -74,6 +73,8 @@ namespace University_CRM.Models
             var source = gridViews.GetValue(ItemsControl.ItemsSourceProperty) as BindingList<StudentModel>;
             source.Add(new StudentModel() { FirstName = firstName, LastName = lastName, Course = course });
 
+            
+
 
 
 
@@ -91,9 +92,12 @@ namespace University_CRM.Models
             var source = gridViews.GetValue(ItemsControl.ItemsSourceProperty) as BindingList<StudentModel>;
             source.Remove(studentrow);
 
+
             doController.DeleteFileFromBucket($"{studentrow.FirstName} {studentrow.LastName}");
 
+            
 
+          
 
         }
 

@@ -17,9 +17,22 @@ namespace University_CRM
             return conn;
         }
 
+        public static MySqlConnection GetAsyncConnection()
+        {
+            MySqlConnection conn = new MySqlConnection("server=db-mysql-fra1-23926-do-user-11906132-0.b.db.ondigitalocean.com;" +
+                                                       "port=25060;" +
+                                                       "uid=doadmin;" +
+                                                       "pwd=AVNS_81E2oOjULm7AddEr_8Q;" +
+                                                       "database=university;");
+            conn.OpenAsync();
+            return conn;
+        }
+
         public static void CloseConnection(MySqlConnection conn)
         {
             conn.Close();
         }
+
+
     }
 }
