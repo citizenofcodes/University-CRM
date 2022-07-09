@@ -5,6 +5,7 @@ using Amazon.S3.Model;
 using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.IO;
 using System.Net.Http;
 using System.Text.RegularExpressions;
@@ -28,7 +29,6 @@ namespace University_CRM
             
             using HttpClient client = new HttpClient();
 
-            //var imagebytes = doController.GetFileInBytes("LillianDrake");
 
             int counter = 1;
 
@@ -85,10 +85,9 @@ namespace University_CRM
 
         private AmazonS3Config config;
         private AmazonS3Client awsClient;
-        const string AccessKey = "JGYMZG3ECU6SY4WAWLMT";
-        const string SecretKey = "+NdNHURwG8Hb41IzZ98DBUxEwgKf4qwOuCXKT9qQDpk";
-        const string BucketName = "universitycrm";
-        const string Token = "dop_v1_9457bf4dcbc4a3725a2ddd89a702ce50ebd6b951aa03764e73fa895f4344f9c0";
+        readonly string AccessKey = ConfigurationManager.AppSettings.Get("DoAccessKey");
+        readonly string SecretKey = ConfigurationManager.AppSettings.Get("DoSecretKey");
+        readonly string BucketName = ConfigurationManager.AppSettings.Get("DoBucketName");
 
         public DigitalOceanSpacesController()
         {
