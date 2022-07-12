@@ -1,9 +1,12 @@
 ﻿using MySql.Data.MySqlClient;
+using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
@@ -32,7 +35,7 @@ namespace University_CRM
 
             RefreshGrid();
             StudentsList.ListChanged += StudentsListListChanged;
-            Pie.DataContext =  LiveChartPainter.DrawDonut(); ;
+            Pie.DataContext = LiveChartPainter.DrawDonut(); ;
             DataContext = this;
         }
 
@@ -176,6 +179,24 @@ namespace University_CRM
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+
+        private void ChangeTheme_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            
+            var style = ((ComboBoxItem)e.AddedItems[0]).Content;
+
+            if (style != null)
+            {
+                var uri = new Uri("Themes\\" + style + "Theme.xaml", UriKind.Relative);
+
+                ResourceDictionary resourceDict = Application.LoadComponent(uri) as ResourceDictionary;
+
+                Application.Current.Resources.Clear();
+
+                Application.Current.Resources.MergedDictionaries.Add(resourceDict);
+            }
         }
     }
 

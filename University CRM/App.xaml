@@ -3,8 +3,13 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:University_CRM"
              xmlns:lvc ="clr-namespace:LiveCharts;assembly=LiveCharts"
+             xmlns:system="clr-namespace:System;assembly=mscorlib"
              StartupUri="DataBaseViewer.xaml">
     <Application.Resources>
-         
+     <ResourceDictionary>
+         <ResourceDictionary.MergedDictionaries>
+            <ResourceDictionary Source="Themes/LightTheme.xaml"></ResourceDictionary>
+         </ResourceDictionary.MergedDictionaries>
+     </ResourceDictionary>
     </Application.Resources>
 </Application>

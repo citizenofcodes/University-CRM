@@ -5,18 +5,15 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:University_CRM"
         mc:Ignorable="d"
-        Title="Add new student" Height="212" Width="230" WindowStartupLocation="CenterScreen" ResizeMode="NoResize">
+        Title="Add new student" Height="212" Width="230" WindowStartupLocation="CenterScreen" ResizeMode="NoResize" Style="{DynamicResource CustomWindowStyle}"
+        Icon="UniversityIcon.ico">
     <Window.Resources>
-        <Style TargetType="TextBox">
-            <Setter Property="FontSize" Value="16" />
-            <Setter Property="Margin" Value="10"/>
-        </Style>
     </Window.Resources>
     <Grid>
         <StackPanel Margin="10">
-            <TextBox x:Name="FirstName" ToolTip="First Name">First Name</TextBox>
-            <TextBox x:Name="LastName" ToolTip="Last Name">Last Name</TextBox>
-            <TextBox x:Name="Course" ToolTip="Course" >Course</TextBox>
+            <TextBox x:Name="FirstName" ToolTip="First Name" FontSize="16" Margin="10">First Name</TextBox>
+            <TextBox x:Name="LastName" ToolTip="Last Name"  FontSize="16" Margin="10">Last Name</TextBox>
+            <TextBox x:Name="Course" ToolTip="Course" FontSize="16" Margin="10" >Course</TextBox>
             <Button x:Name="AddButton" MaxWidth="150" Click="AddButton_Click" Cursor="Hand">Add</Button>
         </StackPanel>
 
