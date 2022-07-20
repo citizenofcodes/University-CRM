@@ -4,17 +4,25 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:University_CRM"
+        xmlns:vm="clr-namespace:University_CRM.ViewModels"
+        xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
         mc:Ignorable="d"
         Title="Add new student" Height="212" Width="230" WindowStartupLocation="CenterScreen" ResizeMode="NoResize" Style="{DynamicResource CustomWindowStyle}"
         Icon="UniversityIcon.ico">
     <Window.Resources>
     </Window.Resources>
+    <Window.DataContext>
+        <vm:AddStudentWindowViewModel />
+    </Window.DataContext>
+
+   
+
     <Grid>
         <StackPanel Margin="10">
-            <TextBox x:Name="FirstName" ToolTip="First Name" FontSize="16" Margin="10">First Name</TextBox>
-            <TextBox x:Name="LastName" ToolTip="Last Name"  FontSize="16" Margin="10">Last Name</TextBox>
-            <TextBox x:Name="Course" ToolTip="Course" FontSize="16" Margin="10" >Course</TextBox>
-            <Button x:Name="AddButton" MaxWidth="150" Click="AddButton_Click" Cursor="Hand">Add</Button>
+            <TextBox x:Name="FirstName" ToolTip="First Name" Text="{Binding FirstName}" FontSize="16" Margin="10" />
+            <TextBox x:Name="LastName" ToolTip="Last Name" Text="{Binding LastName}" FontSize="16" Margin="10" />
+            <TextBox x:Name="Course" ToolTip="Course" Text="{Binding Course}" FontSize="16" Margin="10" />
+            <Button x:Name="AddButton" MaxWidth="150" Cursor="Hand" Command="{Binding AddStudent}">Add</Button>
         </StackPanel>
 
     </Grid>

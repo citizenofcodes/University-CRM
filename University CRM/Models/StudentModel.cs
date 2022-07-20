@@ -3,12 +3,14 @@ using MySql.Data.MySqlClient;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using University_CRM.ViewModels;
 
 namespace University_CRM.Models
 {
-    public class StudentModel : INotifyPropertyChanged
+    public class StudentModel : BaseVm
 
     {
         public int Id { get; set; }
@@ -21,7 +23,7 @@ namespace University_CRM.Models
                 if (_firstName == value)
                     return;
                 _firstName = value;
-                OnPropertyChanged("FirstName");
+                OnPropertyChanged();
             }
         }
 
@@ -35,7 +37,7 @@ namespace University_CRM.Models
                 if (_lastName == value)
                     return;
                 _lastName = value;
-                OnPropertyChanged("LastName");
+                OnPropertyChanged();
             }
         }
 
@@ -49,35 +51,53 @@ namespace University_CRM.Models
                 if (_course == value)
                     return;
                 _course = value;
-                OnPropertyChanged("Course");
+                OnPropertyChanged();
             }
         }
 
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        protected virtual void OnPropertyChanged(string propertyname = "")
+        public static async Task<IEnumerable<StudentModel>> OnLoad(List<string> courses)
         {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyname));
+            List<StudentModel> studentsList = new List<StudentModel>();
+            using (var conn = await DB.GetAsyncConnection())
+            {
+                var cmd = new MySqlCommand("", conn);
+                cmd.CommandText = "SELECT  id,FirstName,LastName,Course FROM students";
+                var reader = (MySqlDataReader) await cmd.ExecuteReaderAsync();
+                courses.Add("any");
+                while (reader.Read())
+                {
 
+                    studentsList.Add(new StudentModel()
+                    {
+                        Id = reader.GetInt32(0),
+                        FirstName = reader.GetString("FirstName"),
+                        LastName = reader.GetString("LastName"),
+                        Course = reader.GetString("Course")
+                    });
+
+                    if (!courses.Contains(reader.GetString("Course")))
+                    {
+                        courses.Add(reader.GetString("Course"));
+                    }
+
+                }
+
+                reader.Close();
+
+                return studentsList;
+
+            }
         }
 
-
-        public static void AddStudent(string firstName, string lastName, string course, DataGrid gridViews)
+        public static void AddStudent(StudentModel student)
         {
+            var st = student;
             MySqlCommand cmd = new MySqlCommand("", DB.GetConnection());
             cmd.CommandText = "INSERT INTO `students`(`FirstName`,`LastName`,`Course`) VALUES (@FirstName, @LastName, @Course)";
-            cmd.Parameters.AddWithValue("@FirstName", firstName);
-            cmd.Parameters.AddWithValue("@LastName", lastName);
-            cmd.Parameters.AddWithValue("@Course", course);
+            cmd.Parameters.AddWithValue("@FirstName", st.FirstName);
+            cmd.Parameters.AddWithValue("@LastName", st.LastName);
+            cmd.Parameters.AddWithValue("@Course", st.Course);
             cmd.ExecuteNonQuery();
-            var source = gridViews.GetValue(ItemsControl.ItemsSourceProperty) as BindingList<StudentModel>;
-            source.Add(new StudentModel() { FirstName = firstName, LastName = lastName, Course = course });
-
-            
-
-
-
-
         }
 
         public static void DeleteStudentFromDb(object sender, DataGrid gridViews)
@@ -98,27 +118,6 @@ namespace University_CRM.Models
             
 
           
-
-        }
-
-        public static void StudentsFilter(string filter, BindingList<StudentModel> studentsList, ComboBox coursesBox, DataGrid gridViews)
-        {
-
-            IEnumerable<StudentModel> filteredList = studentsList;
-            if (filter != "")
-            {
-                filteredList = filteredList.Where(x => x.FirstName.Contains(filter) || x.LastName.Contains(filter));
-            }
-
-            if (coursesBox.SelectedIndex != 0)
-            {
-                filteredList = filteredList.Where(x => x.Course.Contains(coursesBox.Text));
-
-            }
-            
-           var bindingfilterlist = new BindingList<StudentModel>(filteredList.ToList());
-           studentsList = bindingfilterlist;
-            gridViews.ItemsSource = studentsList;
 
         }
 

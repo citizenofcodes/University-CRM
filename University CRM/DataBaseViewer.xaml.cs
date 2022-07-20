@@ -33,46 +33,15 @@ namespace University_CRM
 
             InitializeComponent();
 
-            RefreshGrid();
+            
             StudentsList.ListChanged += StudentsListListChanged;
             Pie.DataContext = LiveChartPainter.DrawDonut(); ;
-            DataContext = this;
+            //DataContext = this;
         }
 
 
 
-        private void RefreshGrid()
-        {
-
-            MySqlCommand cmd = new MySqlCommand("", DB.GetConnection());
-            cmd.CommandText = "SELECT  id,FirstName,LastName,Course FROM students";
-            var reader = cmd.ExecuteReader();
-            while (reader.Read())
-            {
-
-                StudentsList.Add(new StudentModel()
-                {
-                    Id = reader.GetInt32(0),
-                    FirstName = reader.GetString("FirstName"),
-                    LastName = reader.GetString("LastName"),
-                    Course = reader.GetString("Course")
-                });
-
-                if (!CoursesBox.Items.Contains(reader.GetString("Course")))
-                {
-                    CoursesBox.Items.Add(reader.GetString("Course"));
-                }
-
-
-
-                GridViews.ItemsSource = StudentsList;
-            }
-
-            reader.Close();
-
-
-        }
-
+       
 
 
         private void StudentsListListChanged(object sender, ListChangedEventArgs e)
@@ -111,12 +80,12 @@ namespace University_CRM
 
         private void FilterButton_Click(object sender, RoutedEventArgs e)
         {
-            StudentModel.StudentsFilter(NameFilter.Text, StudentsList, CoursesBox, GridViews);
+           
         }
 
         private void MenuItem_Add(object sender, RoutedEventArgs e)
         {
-            AddStudentWindow addStudent = new AddStudentWindow(GridViews);
+            AddStudentWindow addStudent = new AddStudentWindow();
             addStudent.ShowDialog();
 
 

@@ -4,9 +4,11 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:University_CRM"
+        xmlns:vm="clr-namespace:University_CRM.ViewModels"
         xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
+        xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
         mc:Ignorable="d"
-        Title="{Binding StudentsCounter}" Height="450" Width="800" MinHeight="400" MinWidth="850"  WindowStartupLocation="CenterScreen" Style="{DynamicResource CustomWindowStyle}"
+        Title="{Binding Title}" Height="450" Width="800" MinHeight="400" MinWidth="850"  WindowStartupLocation="CenterScreen" Style="{DynamicResource CustomWindowStyle}"
         Icon="UniversityIcon.ico">
     <Window.Resources>
         
@@ -26,6 +28,16 @@
 
     </Window.Resources>
 
+    <Window.DataContext>
+        <vm:DataBaseViewerViewModel />
+    </Window.DataContext>
+    
+    <i:Interaction.Triggers>
+        <i:EventTrigger EventName="Loaded">
+            <i:InvokeCommandAction Command="{Binding WindowLoad}"></i:InvokeCommandAction>
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
+
     <Grid>
 
         <Grid.ColumnDefinitions>
@@ -39,16 +51,16 @@
         </Grid.RowDefinitions>
 
         <StackPanel Grid.Column="1" Grid.Row="0" Grid.RowSpan="3" >
-            <TextBox Name="NameFilter" MinHeight="10" FontSize="14"></TextBox>
+            <TextBox Name="NameFilter" MinHeight="10" FontSize="14" Text="{Binding FilterText, UpdateSourceTrigger=PropertyChanged}"></TextBox>
             <StackPanel Orientation="Horizontal">
-                <ComboBox x:Name="CoursesBox"  MinHeight="30"  MinWidth="90" MaxWidth="150" HorizontalAlignment="Left" Margin="0,20,0,0" Cursor="Hand">
-                    <ComboBoxItem IsSelected="True">Courses</ComboBoxItem>
+                <ComboBox x:Name="CoursesBox"  MinHeight="30" ItemsSource="{Binding Courses}" SelectedIndex="{Binding CourseIndex}"  MinWidth="90" MaxWidth="150" HorizontalAlignment="Left" Margin="0,20,0,0" Cursor="Hand">
+                    
                 </ComboBox>
                 <Button x:Name ="ButtonFilter" MaxHeight="30" MinWidth="90" Margin="20,20,20,0" Click="FilterButton_Click" Style="{DynamicResource RoundedCorners}">Search</Button>
             </StackPanel>
             <Popup Name="Popup" Placement="Mouse" AllowsTransparency="True" Width="200" Height="300" >
                 <StackPanel Style="{DynamicResource PopupStackPanelStyle}">
-                    <Image Name="PopupImage" Source="avatar0.jpg" MinHeight="100" MinWidth="100"></Image>
+                    <Image Name="PopupImage"  MinHeight="100" MinWidth="100"></Image>
                     <TextBlock Name="PopupFullName" Text="Stanislav Grabkov" HorizontalAlignment="Center" FontSize="15" Margin="0,10,0,0"></TextBlock>
                     <TextBlock Name="PopupCourse" Text="Math" HorizontalAlignment="Center" FontSize="15" Margin="0,10,0,0"></TextBlock>
 
@@ -72,7 +84,7 @@
                 </ComboBox>
                 </MenuItem>
         </Menu>
-        <DataGrid  x:Name="GridViews" Grid.Column="0" Grid.RowSpan="3"  AutoGenerateColumns="False" CanUserAddRows="False" Margin="0,20,0,0" HeadersVisibility="Column"   >
+        <DataGrid  x:Name="GridViews" Grid.Column="0" Grid.RowSpan="3" ItemsSource="{Binding Students}"  AutoGenerateColumns="False" CanUserAddRows="False" Margin="0,20,0,0" HeadersVisibility="Column"   >
             
             <DataGrid.Columns>
                 <DataGridTextColumn Header="ID" Width="50" Binding="{Binding Path=Id}" Visibility="Collapsed"></DataGridTextColumn>

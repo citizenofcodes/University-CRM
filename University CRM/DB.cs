@@ -1,4 +1,5 @@
-﻿using MySql.Data;
+﻿using System.Threading.Tasks;
+using MySql.Data;
 using MySql.Data.MySqlClient;
 
 namespace University_CRM
@@ -17,14 +18,14 @@ namespace University_CRM
             return conn;
         }
 
-        public static MySqlConnection GetAsyncConnection()
+        public static async Task<MySqlConnection> GetAsyncConnection()
         {
             MySqlConnection conn = new MySqlConnection("server=db-mysql-fra1-23926-do-user-11906132-0.b.db.ondigitalocean.com;" +
                                                        "port=25060;" +
                                                        "uid=doadmin;" +
                                                        "pwd=AVNS_81E2oOjULm7AddEr_8Q;" +
                                                        "database=university;");
-            conn.OpenAsync();
+            await conn.OpenAsync();
             return conn;
         }
 
