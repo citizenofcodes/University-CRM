@@ -13,7 +13,7 @@ namespace University_CRM.Services
 {
     public interface IStudentRepository
     {
-        Task<IEnumerable<StudentModel>> OnLoad(List<string> courses);
+        Task<IEnumerable<StudentModel>> OnLoad();
         void AddStudent(StudentModel student);
         void DeleteStudentFromDb(StudentModel student);
         void UpdateStudent(ListChangedEventArgs e, BindingList<StudentModel> studentsList);
@@ -21,7 +21,7 @@ namespace University_CRM.Services
 
     internal class StudentRepository : IStudentRepository
     {
-        public async Task<IEnumerable<StudentModel>> OnLoad(List<string> courses)
+        public async Task<IEnumerable<StudentModel>> OnLoad()
         {
             List<StudentModel> studentsList = new List<StudentModel>();
             using (var conn = await DB.GetAsyncConnection())
@@ -29,7 +29,6 @@ namespace University_CRM.Services
                 var cmd = new MySqlCommand("", conn);
                 cmd.CommandText = "SELECT  id,FirstName,LastName,Course FROM students";
                 var reader = (MySqlDataReader)await cmd.ExecuteReaderAsync();
-                courses.Add("any");
                 while (reader.Read())
                 {
 
@@ -40,11 +39,6 @@ namespace University_CRM.Services
                         LastName = reader.GetString("LastName"),
                         Course = reader.GetString("Course")
                     });
-
-                    if (!courses.Contains(reader.GetString("Course")))
-                    {
-                        courses.Add(reader.GetString("Course"));
-                    }
 
                 }
 

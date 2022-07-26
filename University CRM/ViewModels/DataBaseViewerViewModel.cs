@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls.Primitives;
 using System.Windows.Data;
@@ -30,9 +31,9 @@ namespace University_CRM.ViewModels
 
         public string Title => $"University Base[{_studView?.Count.ToString()}] students";
 
-        private string[] _courses;
+        private List<string> _courses;
 
-        public string[] Courses
+        public List<string> Courses
         {
             get { return _courses; }
             set { _courses = value; OnPropertyChanged(); }
@@ -136,9 +137,10 @@ namespace University_CRM.ViewModels
 
         public async void Load()
         {
-            List<string> courses = new List<string>();
-            Students = new ObservableCollection<StudentModel>(await _studentRepository.OnLoad(courses));
-            Courses = courses.ToArray();
+            Students = new ObservableCollection<StudentModel>(await _studentRepository.OnLoad());
+            Courses = Students.Select(x => x.Course).Distinct().ToList();
+            Courses.Insert(0,"any");
+
             StudView = (CollectionView)CollectionViewSource.GetDefaultView(Students);
             OnPropertyChanged(nameof(Title));
         }
@@ -146,7 +148,13 @@ namespace University_CRM.ViewModels
         public void AddToList(StudentModel student)
         {
             Students.Add(student);
-            StudView = (CollectionView)CollectionViewSource.GetDefaultView(Students);
+            StudView.Refresh();
+
+            if (!Courses.Contains(student.Course))
+            {
+                Courses.Add(student.Course);
+            }
+
             OnPropertyChanged(nameof(Title));
         }
 

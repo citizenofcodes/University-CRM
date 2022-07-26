@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
+using Microsoft.Extensions.DependencyInjection;
 using University_CRM.Infrastructure.Commands;
 using University_CRM.Models;
 using University_CRM.Services;
@@ -36,7 +37,7 @@ namespace University_CRM.ViewModels
             var student = new StudentModel() { FirstName = FirstName, LastName = LastName, Course = Course };
 
             _studentRepository.AddStudent(student);
-            //AddToList(student);
+            App.AppHost.Services.GetRequiredService<DataBaseViewerViewModel>().AddToList(student);
         }
     }
 }
