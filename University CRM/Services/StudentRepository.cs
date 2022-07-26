@@ -15,7 +15,7 @@ namespace University_CRM.Services
     {
         Task<IEnumerable<StudentModel>> OnLoad(List<string> courses);
         void AddStudent(StudentModel student);
-        void DeleteStudentFromDb(object sender, DataGrid gridViews);
+        void DeleteStudentFromDb(StudentModel student);
         void UpdateStudent(ListChangedEventArgs e, BindingList<StudentModel> studentsList);
     }
 
@@ -66,16 +66,12 @@ namespace University_CRM.Services
             cmd.ExecuteNonQuery();
         }
 
-        public void DeleteStudentFromDb(object sender, DataGrid gridViews)
+        public void DeleteStudentFromDb(StudentModel student)
         {
             MySqlCommand cmd = new MySqlCommand("", DB.GetConnection());
-            var element = sender as FrameworkElement;
-            var studentrow = element.DataContext as StudentModel;
             cmd.CommandText = "DELETE FROM `students` WHERE id = @id";
-            cmd.Parameters.AddWithValue("@id", studentrow.Id);
+            cmd.Parameters.AddWithValue("@id", student.Id);
             cmd.ExecuteNonQuery();
-            var source = gridViews.GetValue(ItemsControl.ItemsSourceProperty) as BindingList<StudentModel>;
-            source.Remove(studentrow);
 
 
             //_doService.DeleteFileFromBucket($"{studentrow.FirstName} {studentrow.LastName}");

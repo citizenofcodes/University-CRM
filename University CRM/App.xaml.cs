@@ -25,7 +25,9 @@ namespace University_CRM
                 .ConfigureServices((hostContext, services) =>
                 {
                     services.AddSingleton<DataBaseViewer>();
+                    services.AddSingleton<AddStudentWindowViewModel>();
                     services.AddSingleton<DataBaseViewerViewModel>();
+                    services.AddSingleton<ILiveChartService,LiveChartService>();
                     services.AddSingleton<IDigitalOceanService, DigitalOceanService>();
                     services.AddSingleton<IStudentRepository, StudentRepository>();
 

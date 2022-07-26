@@ -11,11 +11,7 @@
         Icon="UniversityIcon.ico">
     <Window.Resources>
     </Window.Resources>
-    <Window.DataContext>
-        <vm:AddStudentWindowViewModel />
-    </Window.DataContext>
 
-   
 
     <Grid>
         <StackPanel Margin="10">

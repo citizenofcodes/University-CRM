@@ -1,11 +1,4 @@
-﻿using System;
-using MySql.Data.MySqlClient;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
+﻿using Microsoft.Extensions.DependencyInjection;
 using University_CRM.ViewModels;
 
 namespace University_CRM.Models
@@ -55,6 +48,6 @@ namespace University_CRM.Models
             }
         }
 
-        
+
     }
 }

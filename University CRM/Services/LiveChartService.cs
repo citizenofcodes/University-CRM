@@ -1,14 +1,18 @@
-﻿using LiveCharts;
+﻿using System;
+using LiveCharts;
 using LiveCharts.Wpf;
 using MySql.Data.MySqlClient;
-using System;
-using System.Collections.Generic;
 
-namespace University_CRM
+namespace University_CRM.Services
 {
-    internal static class LiveChartPainter
+    internal interface ILiveChartService
     {
-        public static SeriesCollection DrawDonut()
+        SeriesCollection DrawDonut();
+    }
+
+    internal  class LiveChartService : ILiveChartService
+    {
+        public SeriesCollection DrawDonut()
         {
             Func<ChartPoint, string> labelPoint = chartPoint =>
                 string.Format("{0} ({1:P})", chartPoint.Y, chartPoint.Participation);

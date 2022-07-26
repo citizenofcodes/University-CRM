@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Media.Imaging;
 using Amazon;
 using Amazon.Runtime;
 using Amazon.S3;
@@ -19,6 +20,8 @@ namespace University_CRM.Services
     {
         Task<byte[]> GetFileInBytes(string fileName);
         Task UploadFileFromStream(Stream response, string fileName);
+
+        Task<BitmapImage> GetBitmapImageFromDigitalOcean(string firstName, string lastName);
         Task DeleteFileFromBucket(string fileName);
     }
 
@@ -98,6 +101,19 @@ namespace University_CRM.Services
             {
                 MessageBox.Show(e.Message);
             }
+        }
+
+        public async Task<BitmapImage> GetBitmapImageFromDigitalOcean(string firstName, string lastName)
+        {
+
+            var file = await GetFileInBytes($"{firstName} {lastName}");
+            BitmapImage image = new BitmapImage();
+            using MemoryStream imageStream = new MemoryStream(file);
+            image.BeginInit();
+            image.StreamSource = imageStream;
+            image.CacheOption = BitmapCacheOption.OnLoad;
+            image.EndInit();
+            return image;
         }
     }
 }
