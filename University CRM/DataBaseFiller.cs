@@ -18,9 +18,6 @@ namespace University_CRM
     internal class DataBaseFiller
     {
 
-        DataBaseFiller() {}
-
-
         public static async Task FillDb()
         {
             Random random = new Random();
