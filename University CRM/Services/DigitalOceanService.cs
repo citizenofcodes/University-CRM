@@ -15,7 +15,7 @@ using Amazon.S3.Model;
 
 namespace University_CRM.Services
 {
-    internal interface IDigitalOceanService
+    public interface IDigitalOceanService
     {
         Task<byte[]> GetFileInBytes(string fileName);
         Task UploadFileFromStream(Stream response, string fileName);

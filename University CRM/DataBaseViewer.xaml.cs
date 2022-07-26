@@ -10,7 +10,10 @@ using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
+using Microsoft.Extensions.DependencyInjection;
 using University_CRM.Models;
+using University_CRM.Services;
+using University_CRM.ViewModels;
 
 namespace University_CRM
 {
@@ -20,23 +23,23 @@ namespace University_CRM
     public partial class DataBaseViewer : Window, INotifyPropertyChanged
 
     {
+        private readonly IDigitalOceanService _doService;
+        private readonly IStudentRepository _studentRepository;
         public BindingList<StudentModel> StudentsList = new BindingList<StudentModel>();
 
 
         public string StudentsCounter => $"University Base[{StudentsList.Count.ToString()}] students";
 
-        public DataBaseViewer()
+        public DataBaseViewer(IDigitalOceanService doService, IStudentRepository studentRepository )
         {
-
-            //DataBaseFiller.FillDb();
-
+            _doService = doService;
+            _studentRepository = studentRepository;
 
             InitializeComponent();
 
-            
             StudentsList.ListChanged += StudentsListListChanged;
             Pie.DataContext = LiveChartPainter.DrawDonut(); ;
-            //DataContext = this;
+            DataContext = App.AppHost.Services.GetRequiredService<DataBaseViewerViewModel>();
         }
 
 
@@ -64,7 +67,7 @@ namespace University_CRM
                 case ListChangedType.ItemMoved:
                     break;
                 case ListChangedType.ItemChanged:
-                    StudentModel.UpdateStudent(e, StudentsList);
+                    _studentRepository.UpdateStudent(e, StudentsList);
 
                     break;
                 case ListChangedType.PropertyDescriptorAdded:
@@ -95,7 +98,7 @@ namespace University_CRM
 
         private void DeleteButton_Click(object sender, RoutedEventArgs e)
         {
-            StudentModel.DeleteStudentFromDb(sender, GridViews);
+            _studentRepository.DeleteStudentFromDb(sender, GridViews);
 
         }
 
@@ -123,8 +126,8 @@ namespace University_CRM
 
             async Task<BitmapImage> GetBitmapImageFromDigitalOcean()
             {
-                DigitalOceanSpacesController doController = new DigitalOceanSpacesController();
-                var file = await doController.GetFileInBytes($"{firstName} {lastName}");
+                
+                var file = await _doService.GetFileInBytes($"{firstName} {lastName}");
                 BitmapImage image = new BitmapImage();
                 using MemoryStream imageStream = new MemoryStream(file);
                 image.BeginInit();

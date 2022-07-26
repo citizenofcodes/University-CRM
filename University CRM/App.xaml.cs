@@ -8,6 +8,7 @@ using System.Windows;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using University_CRM.Services;
+using University_CRM.ViewModels;
 
 namespace University_CRM
 {
@@ -24,7 +25,10 @@ namespace University_CRM
                 .ConfigureServices((hostContext, services) =>
                 {
                     services.AddSingleton<DataBaseViewer>();
+                    services.AddSingleton<DataBaseViewerViewModel>();
                     services.AddSingleton<IDigitalOceanService, DigitalOceanService>();
+                    services.AddSingleton<IStudentRepository, StudentRepository>();
+
 
 
                 })

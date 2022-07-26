@@ -5,11 +5,13 @@ using System.Windows.Data;
 using System.Windows.Input;
 using University_CRM.Infrastructure.Commands;
 using University_CRM.Models;
+using University_CRM.Services;
 
 namespace University_CRM.ViewModels
 {
     internal class DataBaseViewerViewModel : BaseVm
     {
+        private readonly IStudentRepository _studentRepository;
         public ICommand WindowLoad { get; }
 
 
@@ -60,8 +62,9 @@ namespace University_CRM.ViewModels
 
 
 
-        public DataBaseViewerViewModel()
+        public DataBaseViewerViewModel(IStudentRepository studentRepository)
         {
+            _studentRepository = studentRepository;
 
             WindowLoad = new Command(Load);
 
@@ -112,7 +115,7 @@ namespace University_CRM.ViewModels
         public async void Load()
         {
             List<string> courses = new List<string>();
-            Students = new ObservableCollection<StudentModel>(await StudentModel.OnLoad(courses));
+            Students = new ObservableCollection<StudentModel>(await _studentRepository.OnLoad(courses));
             Courses = courses.ToArray();
             StudView = (CollectionView)CollectionViewSource.GetDefaultView(Students);
             OnPropertyChanged(nameof(Title));

@@ -28,10 +28,6 @@
 
     </Window.Resources>
 
-    <Window.DataContext>
-        <vm:DataBaseViewerViewModel />
-    </Window.DataContext>
-    
     <i:Interaction.Triggers>
         <i:EventTrigger EventName="Loaded">
             <i:InvokeCommandAction Command="{Binding WindowLoad}"></i:InvokeCommandAction>
