@@ -275,6 +275,7 @@
     </ApplicationDefinition>
     <Compile Include="Infrastructure\Commands\Command.cs" />
     <Compile Include="Properties\Annotations.cs" />
+    <Compile Include="Services\DigitalOceanService.cs" />
     <Compile Include="Themes\DarkTheme.cs" />
     <Compile Include="Themes\LightTheme.xaml.cs">
       <DependentUpon>LightTheme.xaml</DependentUpon>

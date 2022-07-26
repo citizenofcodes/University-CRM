@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using University_CRM.Services;
 
 namespace University_CRM
 {
@@ -23,7 +24,8 @@ namespace University_CRM
                 .ConfigureServices((hostContext, services) =>
                 {
                     services.AddSingleton<DataBaseViewer>();
-              
+                    services.AddSingleton<IDigitalOceanService, DigitalOceanService>();
+
 
                 })
                 .Build();

@@ -11,19 +11,27 @@ using System.Net.Http;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Web.Hosting;
 using System.Windows;
+using Microsoft.Extensions.DependencyInjection;
+using University_CRM.Services;
 
 namespace University_CRM
 {
     internal class DataBaseFiller
     {
+        private static readonly IDigitalOceanService _doService;
+
+        static DataBaseFiller()
+        {
+            _doService = App.AppHost.Services.GetRequiredService<IDigitalOceanService>();
+        }
 
         public static async Task FillDb()
         {
             Random random = new Random();
             List<string> courses = new List<string>() { "It", "Phil", "Math", "Sys", "Act" };
-            DigitalOceanSpacesController doController = new DigitalOceanSpacesController();
-            
+
             using HttpClient client = new HttpClient();
 
 
@@ -46,7 +54,7 @@ namespace University_CRM
                     MemoryStream ms = new MemoryStream(response);
 
 
-                    await doController.UploadFileFromStream(ms, $"avatars/{firstName} {lastName}.jpg");
+                    await _doService.UploadFileFromStream(ms, $"avatars/{firstName} {lastName}.jpg");
                     var command = new MySqlCommand($"INSERT INTO `students`(" +
                                                    $"`FirstName`," +
                                                    $"`LastName`," +
@@ -75,88 +83,5 @@ namespace University_CRM
             
 
         }
-    }
-
-    internal class DigitalOceanSpacesController
-    {
-
-        private AmazonS3Config config;
-        private AmazonS3Client awsClient;
-        readonly string AccessKey = ConfigurationManager.AppSettings.Get("DoAccessKey");
-        readonly string SecretKey = ConfigurationManager.AppSettings.Get("DoSecretKey");
-        readonly string BucketName = ConfigurationManager.AppSettings.Get("DoBucketName");
-
-        public DigitalOceanSpacesController()
-        {
-            config = new AmazonS3Config()
-            {
-                RegionEndpoint = RegionEndpoint.USEast1,
-                ServiceURL = "https://fra1.digitaloceanspaces.com",
-
-            };
-
-            var credentials = new BasicAWSCredentials(AccessKey, SecretKey);
-            awsClient = new AmazonS3Client(credentials, config);
-        }
-
-
-
-        public async Task<byte[]> GetFileInBytes(string fileName)
-        {
-            MemoryStream ms = new MemoryStream();
-
-            try
-            {
-                var response = await awsClient.GetObjectAsync(BucketName, $"avatars/{fileName}.jpg");
-                await response.ResponseStream.CopyToAsync(ms);
-            }
-
-            catch (Exception e)
-            {
-                MessageBox.Show(e.Message);
-            }
-
-            var objectBytes = ms.ToArray();
-            return objectBytes;
-        }
-
-        public async Task UploadFileFromStream(Stream response, string fileName)
-        {
-            var request = new PutObjectRequest()
-            {
-                BucketName = BucketName,
-                InputStream = response,
-                Key = fileName
-
-            };
-
-            try
-            {
-                await awsClient.PutObjectAsync(request);
-            }
-
-            catch (Exception e)
-            {
-                MessageBox.Show(e.Message);
-            }
-
-        }
-
-
-        public async Task DeleteFileFromBucket(string fileName)
-        {
-            try
-            {
-                var response = await awsClient.DeleteObjectAsync(BucketName, @$"avatars/{fileName}.jpg");
-            }
-
-            catch (Exception e)
-            {
-                MessageBox.Show(e.Message);
-            }
-        }
-
-
-
     }
 }
