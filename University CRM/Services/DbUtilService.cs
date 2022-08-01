@@ -1,33 +1,28 @@
-﻿using Amazon;
-using Amazon.Runtime;
-using Amazon.S3;
-using Amazon.S3.Model;
-using MySql.Data.MySqlClient;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Configuration;
 using System.IO;
+using System.Linq;
 using System.Net.Http;
+using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Web.Hosting;
 using System.Windows;
 using Microsoft.Extensions.DependencyInjection;
-using University_CRM.Services;
+using MySql.Data.MySqlClient;
 
-namespace University_CRM
+namespace University_CRM.Services
 {
-    internal class DataBaseFiller
+    internal interface IDbUtilService
+    {
+        Task FillDb();
+    }
+
+    internal class DbUtilService : IDbUtilService
     {
         private static readonly IDigitalOceanService _doService;
 
-        static DataBaseFiller()
-        {
-            _doService = App.AppHost.Services.GetRequiredService<IDigitalOceanService>();
-        }
-
-        public static async Task FillDb()
+        public async Task FillDb()
         {
             Random random = new Random();
             List<string> courses = new List<string>() { "It", "Phil", "Math", "Sys", "Act" };
@@ -80,7 +75,7 @@ namespace University_CRM
                 Thread.Sleep(1000);
 
             }
-            
+
 
         }
     }

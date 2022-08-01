@@ -275,6 +275,7 @@
     </ApplicationDefinition>
     <Compile Include="Infrastructure\Commands\Command.cs" />
     <Compile Include="Properties\Annotations.cs" />
+    <Compile Include="Services\DbUtilService.cs" />
     <Compile Include="Services\DigitalOceanService.cs" />
     <Compile Include="Services\StudentRepository.cs" />
     <Compile Include="Themes\DarkTheme.cs" />
@@ -299,7 +300,6 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="DataBaseFiller.cs" />
     <Compile Include="DataBaseViewer.xaml.cs">
       <DependentUpon>DataBaseViewer.xaml</DependentUpon>
       <SubType>Code</SubType>
