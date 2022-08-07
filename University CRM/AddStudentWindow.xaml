@@ -6,8 +6,10 @@
         xmlns:local="clr-namespace:University_CRM"
         xmlns:vm="clr-namespace:University_CRM.ViewModels"
         xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+        xmlns:fa="clr-namespace:FontAwesome;assembly=FontAwesome.WPF"
+        xmlns:wpf="http://schemas.fontawesome.io/icons/"
         mc:Ignorable="d"
-        Title="Add new student" Height="212" Width="230" WindowStartupLocation="CenterScreen" ResizeMode="NoResize" Style="{DynamicResource CustomWindowStyle}"
+        Title="Add new student" Height="230" Width="230" WindowStartupLocation="CenterScreen" ResizeMode="NoResize" Style="{DynamicResource CustomWindowStyle}"
         Icon="UniversityIcon.ico">
     <Window.Resources>
     </Window.Resources>
@@ -18,7 +20,10 @@
             <TextBox x:Name="FirstName" ToolTip="First Name" Text="{Binding FirstName}" FontSize="16" Margin="10" />
             <TextBox x:Name="LastName" ToolTip="Last Name" Text="{Binding LastName}" FontSize="16" Margin="10" />
             <TextBox x:Name="Course" ToolTip="Course" Text="{Binding Course}" FontSize="16" Margin="10" />
-            <Button x:Name="AddButton" MaxWidth="150" Cursor="Hand" Command="{Binding AddStudent}">Add</Button>
+            <Button  HorizontalAlignment="Left" Margin="10 0 0 0 " Command="{Binding OpenImageCommand}" Cursor="Hand">
+                <wpf:ImageAwesome Icon="FolderOutlinepenOutline" MaxHeight="20"></wpf:ImageAwesome>
+            </Button>
+            <Button x:Name="AddButton" MaxWidth="150"  Cursor="Hand" Command="{Binding AddStudent}" Margin = "0 5 0 0">Add</Button>
         </StackPanel>
 
     </Grid>

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls.Primitives;
@@ -156,6 +157,7 @@ namespace University_CRM.ViewModels
             }
 
             OnPropertyChanged(nameof(Title));
+            OnPropertyChanged(nameof(PieCollection));
         }
 
         public void DeleteStudent()
@@ -222,8 +224,15 @@ namespace University_CRM.ViewModels
 
                 IsOpened = true;
 
+                try
+                {
+                    PopImage = await _doService.GetBitmapImageFromDigitalOcean(firstName, lastName);
+                }
 
-                PopImage = await _doService.GetBitmapImageFromDigitalOcean(firstName, lastName);
+                catch ( Exception ex)
+                {
+                    Console.WriteLine("Аватар не найден");
+                }
 
             }
         }

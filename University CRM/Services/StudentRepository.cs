@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using Microsoft.Extensions.DependencyInjection;
 using MySql.Data.MySqlClient;
 using University_CRM.Models;
 
@@ -14,7 +16,7 @@ namespace University_CRM.Services
     public interface IStudentRepository
     {
         Task<IEnumerable<StudentModel>> OnLoad();
-        void AddStudent(StudentModel student);
+        void AddStudent(StudentModel student, MemoryStream imageStream);
         void DeleteStudentFromDb(StudentModel student);
         void UpdateStudent(ListChangedEventArgs e, BindingList<StudentModel> studentsList);
     }
@@ -49,7 +51,7 @@ namespace University_CRM.Services
             }
         }
 
-        public void AddStudent(StudentModel student)
+        public void AddStudent(StudentModel student , MemoryStream imageStream)
         {
             var st = student;
             MySqlCommand cmd = new MySqlCommand("", DB.GetConnection());
@@ -58,6 +60,9 @@ namespace University_CRM.Services
             cmd.Parameters.AddWithValue("@LastName", st.LastName);
             cmd.Parameters.AddWithValue("@Course", st.Course);
             cmd.ExecuteNonQuery();
+
+            App.AppHost.Services.GetRequiredService<IDigitalOceanService>()
+                .UploadFileFromStream(imageStream, $"avatars/{st.FirstName} {st.LastName}.jpg");
         }
 
         public void DeleteStudentFromDb(StudentModel student)
